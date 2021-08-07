@@ -16,6 +16,7 @@ class ForgotPassword extends StatelessWidget {
           image: 'assets/jellyfish.jpg',
           ),
         Scaffold(
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
           elevation:0,
