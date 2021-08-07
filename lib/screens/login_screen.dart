@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 //import 'package:font_awesome/';
 import 'package:trello/pallete.dart';
 import 'package:trello/widgets/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class LoginScreen extends StatelessWidget {
