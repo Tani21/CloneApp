@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:trello/screens/create_new_account.dart';
 import 'package:trello/screens/forgot_password.dart';
 import 'package:trello/screens/login_screen.dart';
 
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginScreen(),
         'ForgotPassword': (context) => ForgotPassword(),
+        'CreateNewAccount': (context) => CreateNewAccount(),
       },
       // home: LoginScreen(),
     );
