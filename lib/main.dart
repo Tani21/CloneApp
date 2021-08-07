@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:trello/screens/forgot_password.dart';
 import 'package:trello/screens/login_screen.dart';
 
 
@@ -18,7 +19,13 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.josefinSansTextTheme(Theme.of(context).textTheme),
         primarySwatch: Colors.blue,
       ),
-      home: LoginScreen(),
+
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoginScreen(),
+        'ForgotPassword': (context) => ForgotPassword(),
+      },
+      // home: LoginScreen(),
     );
   }
 }

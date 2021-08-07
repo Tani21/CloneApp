@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 //import 'package:google_fonts/google_fonts.dart';
 //import 'package:font_awesome/';
 import 'package:trello/pallete.dart';
+import 'package:trello/widgets/widgets.dart';
+
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({ Key? key }) : super(key: key);
@@ -10,22 +12,8 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        ShaderMask(
-          shaderCallback: (rect) => LinearGradient(
-            begin: Alignment.bottomCenter,
-            end: Alignment.center,
-            colors: [Colors.black, Colors.transparent]).createShader(rect),
-            blendMode: BlendMode.darken,
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/mountains.jpg'),
-                fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(Colors.black54, BlendMode.darken),
-                
-              ),
-            ),
-          ),
+        BackgroundImage(
+          image: 'assets/mountains.jpg',
         ),
 
         Scaffold(
@@ -44,77 +32,90 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
 
-              TextInputField(),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Container(
-                  height:70,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[500]!.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextInputField(
+                    icon: Icons.email,
+                    hint: 'Email',
+                    inputType: TextInputType.emailAddress,
+                    inputAction: TextInputAction.next,
                   ),
 
-                  child: Center(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Icon(Icons.lock, size: 28, color: kWhite,),
-                        ),
-                        hintText: 'Password',
-                        hintStyle: kBodyText,
-                      ),
-                      obscureText: true,
-                      style: kBodyText,
-                      keyboardType: TextInputType.name,
-                      textInputAction: TextInputAction.done,
-                      ),
+                  PasswordInput(
+                icon: Icons.lock,
+                hint: 'Password',
+                inputType: TextInputType.name,
+                inputAction: TextInputAction.done,
+              ),
+              GestureDetector
+              (
+                onTap: () => Navigator.pushNamed(context, 'ForgotPassword'),
+                child: Text(
+                  'Forgot password', 
+                  style: kBodyText,
                   ),
                 ),
+
+              SizedBox(
+                height: 25,
               ),
+
+              RoundedButton(buttonName: 'Login',),
+              
+              SizedBox(height: 25),
+
             ],
           ),
+                  Container(
+                    child: Text('Create New Account',
+                    style: kBodyText,
+                    ),
+                    decoration: BoxDecoration(border: Border(
+                      bottom: BorderSide(width: 1,
+                      color: kWhite,
+                      ),
+                    ),
+                    ),
+                  ),
+                ],
+              ),     
         ),
       ],
     );
   }
 }
 
-class TextInputField extends StatelessWidget {
-  const TextInputField({
+class BackgroundImage extends StatelessWidget {
+  const BackgroundImage(
+    {
     Key? key,
+    required this.image,
   }) : super(key: key);
+
+  final String image;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+    return ShaderMask(
+      shaderCallback: (rect) => LinearGradient(
+        begin: Alignment.bottomCenter,
+        end: Alignment.center,
+        colors: [Colors.black, Colors.transparent]).createShader(rect),
+        blendMode: BlendMode.darken,
       child: Container(
-        height:70,
         decoration: BoxDecoration(
-          color: Colors.grey[500]!.withOpacity(0.5),
-          borderRadius: BorderRadius.circular(16),
-        ),
-
-        child: Center(
-          child: TextField(
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              prefixIcon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Icon(Icons.card_giftcard, size: 28, color: kWhite,),
-              ),
-              hintText: 'Email',
-              hintStyle: kBodyText,
-            ),
-            style: kBodyText,
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
-            ),
+          image: DecorationImage(
+            image: AssetImage(image),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(Colors.black54, BlendMode.darken),
+            
+          ),
         ),
       ),
     );
   }
 }
+
+
+
