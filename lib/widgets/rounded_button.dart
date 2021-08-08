@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:trello/pallete.dart';
+import 'package:trello/main.dart';
+import '../screens/login_screen.dart';
 
 class RoundedButton extends StatelessWidget {
   const RoundedButton({
-    Key? key, 
+    Key? key,
     required this.buttonName,
   }) : super(key: key);
 
@@ -20,7 +22,11 @@ class RoundedButton extends StatelessWidget {
         color: kBlue,
       ),
       child: TextButton(
-        onPressed: () {},
+        onPressed: () {
+          // main();
+          // UserCredential userCredential = await auth.signInAnonymously();
+          // print(userCredential);
+        },
         child: Text(buttonName,
         style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
       ),

@@ -3,10 +3,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:trello/screens/create_new_account.dart';
 import 'package:trello/screens/forgot_password.dart';
 import 'package:trello/screens/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-
-void main() {
+Future<void> main() async {
   runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 }
 
 class MyApp extends StatelessWidget {
