@@ -8,7 +8,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:trello/main.dart';
 
-String email="", pass="";
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({ Key? key }) : super(key: key);
@@ -55,12 +54,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   TextInputFieldEmail(),
 
-                  PasswordInput(
-                icon: Icons.lock,
-                hint: 'Password',
-                inputType: TextInputType.name,
-                inputAction: TextInputAction.done,
-              ),
+              LoginPagePassword(),
+              //     PasswordInput(
+              //   icon: Icons.lock,
+              //   hint: 'Password',
+              //   inputType: TextInputType.name,
+              //   inputAction: TextInputAction.done,
+              // ),
               GestureDetector
               (
                 onTap: () => Navigator.pushNamed(context, 'ForgotPassword'),
@@ -112,46 +112,6 @@ class NewRoundedButton extends StatefulWidget {
 
 }
 
-class _NewRoundedButtonState extends State<NewRoundedButton> {
-  //FirebaseAuth auth = FirebaseAuth.instance;
-  //var firestore = FirebaseFirestore.instance;
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height * 0.08,
-      width: size.width * 0.8,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: kBlue,
-      ),
-      child: TextButton(
-        onPressed: () async {
-
-            //main();
-          // UserCredential userCredential = await auth.signInAnonymously();
-          // print(userCredential);
-          try {
-            UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                email: "tanishkavaswani1@gmail.com",
-                password: "tanishka",
-            );
-          } on FirebaseAuthException catch (e) {
-            if (e.code == 'user-not-found') {
-              print('No user found for that email.');
-            } else if (e.code == 'wrong-password') {
-              print('Wrong password provided for that user.');
-            }
-          }
-        },
-        child: Text('Login',
-            style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
-      ),
-    );
-  }
-}
-
-
 //
 // class RoundedButton extends StatefulWidget {
 //   const RoundedButton({
@@ -195,11 +155,20 @@ class _NewRoundedButtonState extends State<NewRoundedButton> {
 // }
 
 
-class TextInputFieldEmail extends StatelessWidget {
-  const TextInputFieldEmail({Key? key}) : super(key: key);
+class TextInputFieldEmail extends StatefulWidget {
+   static String email="";
+  TextInputFieldEmail({Key? key}) : super(key: key);
+
+  @override
+  TextInputFieldEmailState createState() => TextInputFieldEmailState();
+}
+
+class TextInputFieldEmailState extends State<TextInputFieldEmail> {
+
 
   @override
   Widget build(BuildContext context) {
+
     Size size  = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -213,6 +182,12 @@ class TextInputFieldEmail extends StatelessWidget {
 
         child: Center(
           child: TextField(
+            onChanged: (value)
+            {
+              setState(() {
+                TextInputFieldEmail.email=value;
+              });
+            },
 
             decoration: InputDecoration(
               border: InputBorder.none,
@@ -232,6 +207,106 @@ class TextInputFieldEmail extends StatelessWidget {
     );
   }
 }
+
+
+class _NewRoundedButtonState extends State<NewRoundedButton> {
+  String storeEmail="", storePassword="";
+  //FirebaseAuth auth = FirebaseAuth.instance;
+  //var firestore = FirebaseFirestore.instance;
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      height: size.height * 0.08,
+      width: size.width * 0.8,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: kBlue,
+      ),
+      child: TextButton(
+        onPressed: () async {
+
+          storeEmail=TextInputFieldEmail.email;
+          storePassword=LoginPagePassword.pass;
+          //print("sss $store");
+
+          //main();
+          // UserCredential userCredential = await auth.signInAnonymously();
+          // print(userCredential);
+          //print(email);
+          try {
+            UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: storeEmail,
+              password: storePassword,
+            );
+          } on FirebaseAuthException catch (e) {
+            if (e.code == 'user-not-found') {
+              print('No user found for that email.');
+            } else if (e.code == 'wrong-password') {
+              print('Wrong password provided for that user.');
+            }
+          }
+        },
+        child: Text('Login',
+            style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
+}
+
+
+class LoginPagePassword extends StatefulWidget {
+  static String pass="";
+  const LoginPagePassword({Key? key}) : super(key: key);
+
+  @override
+  _LoginPagePasswordState createState() => _LoginPagePasswordState();
+}
+
+class _LoginPagePasswordState extends State<LoginPagePassword> {
+  @override
+  Widget build(BuildContext context) {
+    Size size  = MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Container(
+        height:size.height * 0.08,
+        width: size.width * 0.8,
+        decoration: BoxDecoration(
+          color: Colors.grey[500]!.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(16),
+        ),
+
+        child: Center(
+          child: TextField(
+            onChanged: (value)
+            {
+              setState(() {
+                LoginPagePassword.pass=value;
+              });
+            },
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              prefixIcon: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Icon(Icons.lock, size: 28, color: kWhite,),
+              ),
+              hintText: 'Password',
+              hintStyle: kBodyText,
+            ),
+            obscureText: true,
+            style: kBodyText,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.done,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
 
 
 
