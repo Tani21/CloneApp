@@ -52,6 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   //   inputAction: TextInputAction.next,
                   // ),
 
+                  LoginPageUserName(),
                   TextInputFieldEmail(),
 
               LoginPagePassword(),
@@ -239,13 +240,38 @@ class _NewRoundedButtonState extends State<NewRoundedButton> {
               email: storeEmail,
               password: storePassword,
             );
-          } on FirebaseAuthException catch (e) {
+          }
+
+          on FirebaseAuthException catch (e) {
             if (e.code == 'user-not-found') {
               print('No user found for that email.');
             } else if (e.code == 'wrong-password') {
               print('Wrong password provided for that user.');
             }
+            // else
+            //   {
+            //     Navigator.pushNamed(context, 'CardPages');
+            //   }
+
           }
+
+          // User? user = FirebaseAuth.instance.currentUser;
+          // if(user != null && !user.emailVerified)
+          // {
+          //   Navigator.pushNamed(context, 'CardPages');
+          // }
+
+          FirebaseAuth.instance
+              .authStateChanges()
+              .listen((User? user) {
+            if (user == null) {
+              //print('User is currently signed out!');
+            } else {
+              Navigator.pushNamed(context, 'CardPages');
+            }
+          });
+
+
         },
         child: Text('Login',
             style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
@@ -304,6 +330,56 @@ class _LoginPagePasswordState extends State<LoginPagePassword> {
     );
   }
 }
+
+class LoginPageUserName extends StatefulWidget {
+  static String loginPageUserName="";
+  const LoginPageUserName({Key? key}) : super(key: key);
+
+  @override
+  _LoginPageUserNameState createState() => _LoginPageUserNameState();
+}
+
+class _LoginPageUserNameState extends State<LoginPageUserName> {
+  @override
+  Widget build(BuildContext context) {
+    Size size  = MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Container(
+        height:size.height * 0.08,
+        width: size.width * 0.8,
+        decoration: BoxDecoration(
+          color: Colors.grey[500]!.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(16),
+        ),
+
+        child: Center(
+          child: TextField(
+            onChanged: (value)
+            {
+              setState(() {
+                LoginPageUserName.loginPageUserName=value;
+              });
+            },
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              prefixIcon: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Icon(Icons.person_outline, size: 28, color: kWhite,),
+              ),
+              hintText: 'Username',
+              hintStyle: kBodyText,
+            ),
+            style: kBodyText,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.next,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 
 
