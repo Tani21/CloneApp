@@ -101,10 +101,63 @@ class _CardPageState extends State<CardPage> {
                       ),
                       child: TextButton(
                         onPressed: () async {
-                          print(cardname);
+                          //print(cardname);
                             var newmap = {'name': cardname};
                             firestore.collection('firstcollection').add(newmap);
-                            print(cardname);
+                            //print(cardname);
+
+                          // db.collection('collectionName').get()
+                          //     .then(snapshot => console.log(snapshot.size));
+
+
+                          // QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
+                          // await FirebaseFirestore.instance
+                          //     .collection('firstcollection')
+                          //     .get()
+                          //     .then((QuerySnapshot querySnapshot) {
+                          //   querySnapshot.docs.forEach((doc) {
+                          //     print(doc["name"]);
+                          //
+                          //     arraynames.add(doc["name"]);
+                          //     print("arrayname: "+arraynames[i]);
+                          //     i=i+1;
+                          //     print(i);
+                          //   });
+                          // });
+                          //
+                          // for(int j=0; j<arraynames.length; j++)
+                          //   {
+                          //     print("for loop: "+arraynames[j]);
+                          //   }
+
+                           //var query = firestore.collection("firstcollection").get();
+
+                          //
+                          // const snapshot = await query.get();
+                          // const count = snapshot.size;
+                        },
+                        child: Text('Submit',
+                            style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height:10),
+
+                  Center(
+                    child: Container(
+                      height: size.height * 0.08,
+                      width: size.width * 0.8,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2),
+                        color: Colors.lightBlueAccent,
+                      ),
+                      child: TextButton(
+                        onPressed: () async {
+                          // print(cardname);
+                          // var newmap = {'name': cardname};
+                          // firestore.collection('firstcollection').add(newmap);
+                          // print(cardname);
 
                           // db.collection('collectionName').get()
                           //     .then(snapshot => console.log(snapshot.size));
@@ -126,17 +179,38 @@ class _CardPageState extends State<CardPage> {
                           });
 
                           for(int j=0; j<arraynames.length; j++)
-                            {
-                              print("for loop: "+arraynames[j]);
-                            }
+                          {
+                            print("for loop: "+arraynames[j]);
+                          }
 
-                           //var query = firestore.collection("firstcollection").get();
+                          //var query = firestore.collection("firstcollection").get();
 
                           //
                           // const snapshot = await query.get();
                           // const count = snapshot.size;
                         },
-                        child: Text('Submit',
+                        child: Text('Refresh',
+                            style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height:10),
+
+                  Center(
+                    child: Container(
+                      height: size.height * 0.08,
+                      width: size.width * 0.8,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2),
+                        color: Colors.lightBlueAccent,
+                      ),
+                      child: TextButton(
+                        onPressed: () async {
+                          await FirebaseAuth.instance.signOut();
+                          Navigator.pushNamed(context, '/');
+                        },
+                        child: Text('Sign Out',
                             style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
                       ),
                     ),

@@ -165,6 +165,16 @@ class _SignInButtonState extends State<SignInButton> {
             print(e);
           }
 
+          FirebaseAuth.instance
+              .authStateChanges()
+              .listen((User? user) {
+            if (user == null) {
+              //print('User is currently signed out!');
+            } else {
+              Navigator.pushNamed(context, '/');
+            }
+          });
+
 
 
         },
