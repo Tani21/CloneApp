@@ -21,228 +21,264 @@ class _CardPageState extends State<CardPage> {
   var cardname="";
   int i=0;
   var arraynames = [];
+  var firestore = FirebaseFirestore.instance;
+
+  void initApp() async{
+    QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
+    await FirebaseFirestore.instance
+        .collection('firstcollection')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        print(doc["name"]);
+
+        setState(() {
+          arraynames.add(doc["name"]);
+          print("arrayname: "+arraynames[i]);
+          i=i+1;
+          print(i);
+        });
+
+      });
+    });
+  }
+  @override
+
+
+  void initState() {
+    initApp();
+
+    // TODO: implement initState
+    super.initState();
+
+
+  }
   @override
   Widget build(BuildContext context) {
-    var firestore = FirebaseFirestore.instance;
+
 
     Size size  = MediaQuery.of(context).size;
+
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Welcome '+LoginPageUserName.loginPageUserName+'!'),
-        backgroundColor: Colors.lightBlueAccent,
-        elevation: 0,
+        appBar: AppBar(
+          title: Text('Welcome '+LoginPageUserName.loginPageUserName+'!'),
+          backgroundColor: Colors.lightBlueAccent,
+          elevation: 0,
 
-      ),
+        ),
 
-      body:
+        body:
 
-        // Column(
-        //   children: [
-        //     Center(
-        //         child: TextForCardName(),
-        //
-        //     ),
-        //
-        //     Center(child: SubmitButton()),
-        //   ],
-        // )
+          // Column(
+          //   children: [
+          //     Center(
+          //         child: TextForCardName(),
+          //
+          //     ),
+          //
+          //     Center(child: SubmitButton()),
+          //   ],
+          // )
 
 
 
-            
-               Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Center(
-                      child: Container(
-                        height:size.height * 0.08,
-                        width: size.width * 0.8,
-                        decoration: BoxDecoration(
-                            color: Colors.grey[500]!.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(2)
-                        ),
 
-                        child: Center(
-                          child: TextField(
-                            onChanged: (value)
-                            {
-                              setState(() {
-                               cardname=value;
-                              });
-                              print(cardname);
-                            },
+                 Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Center(
+                        child: Container(
+                          height:size.height * 0.08,
+                          width: size.width * 0.8,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[500]!.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(2)
+                          ),
 
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              prefixIcon: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                child: Icon(Icons.email, size: 28, color: kWhite,),
+                          child: Center(
+                            child: TextField(
+                              onChanged: (value)
+                              {
+                                setState(() {
+                                 cardname=value;
+                                });
+                                print(cardname);
+                              },
+
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                prefixIcon: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  child: Icon(Icons.email, size: 28, color: kWhite,),
+                                ),
+                                hintText: 'Card name',
+                                hintStyle: kBodyText,
                               ),
-                              hintText: 'Card name',
-                              hintStyle: kBodyText,
+                              style: kBodyText,
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
                             ),
-                            style: kBodyText,
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.next,
                           ),
                         ),
                       ),
                     ),
-                  ),
 
-                  Center(
-                    child: Container(
-                      height: size.height * 0.08,
-                      width: size.width * 0.8,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2),
-                        color: Colors.lightBlueAccent,
-                      ),
-                      child: TextButton(
-                        onPressed: () async {
-                          //print(cardname);
-                            var newmap = {'name': cardname};
-                            firestore.collection('firstcollection').add(newmap);
+                    Center(
+                      child: Container(
+                        height: size.height * 0.08,
+                        width: size.width * 0.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          color: Colors.lightBlueAccent,
+                        ),
+                        child: TextButton(
+                          onPressed: () async {
                             //print(cardname);
+                              var newmap = {'name': cardname};
+                              firestore.collection('firstcollection').add(newmap);
+                              //print(cardname);
 
-                          // db.collection('collectionName').get()
-                          //     .then(snapshot => console.log(snapshot.size));
-
-
-                          // QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
-                          // await FirebaseFirestore.instance
-                          //     .collection('firstcollection')
-                          //     .get()
-                          //     .then((QuerySnapshot querySnapshot) {
-                          //   querySnapshot.docs.forEach((doc) {
-                          //     print(doc["name"]);
-                          //
-                          //     arraynames.add(doc["name"]);
-                          //     print("arrayname: "+arraynames[i]);
-                          //     i=i+1;
-                          //     print(i);
-                          //   });
-                          // });
-                          //
-                          // for(int j=0; j<arraynames.length; j++)
-                          //   {
-                          //     print("for loop: "+arraynames[j]);
-                          //   }
-
-                           //var query = firestore.collection("firstcollection").get();
-
-                          //
-                          // const snapshot = await query.get();
-                          // const count = snapshot.size;
-                        },
-                        child: Text('Submit',
-                            style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height:10),
-
-                  Center(
-                    child: Container(
-                      height: size.height * 0.08,
-                      width: size.width * 0.8,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2),
-                        color: Colors.lightBlueAccent,
-                      ),
-                      child: TextButton(
-                        onPressed: () async {
-                          // print(cardname);
-                          // var newmap = {'name': cardname};
-                          // firestore.collection('firstcollection').add(newmap);
-                          // print(cardname);
-
-                          // db.collection('collectionName').get()
-                          //     .then(snapshot => console.log(snapshot.size));
+                            // db.collection('collectionName').get()
+                            //     .then(snapshot => console.log(snapshot.size));
 
 
-                          QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
-                          await FirebaseFirestore.instance
-                              .collection('firstcollection')
-                              .get()
-                              .then((QuerySnapshot querySnapshot) {
-                            querySnapshot.docs.forEach((doc) {
-                              print(doc["name"]);
+                            // QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
+                            // await FirebaseFirestore.instance
+                            //     .collection('firstcollection')
+                            //     .get()
+                            //     .then((QuerySnapshot querySnapshot) {
+                            //   querySnapshot.docs.forEach((doc) {
+                            //     print(doc["name"]);
+                            //
+                            //     arraynames.add(doc["name"]);
+                            //     print("arrayname: "+arraynames[i]);
+                            //     i=i+1;
+                            //     print(i);
+                            //   });
+                            // });
+                            //
+                            // for(int j=0; j<arraynames.length; j++)
+                            //   {
+                            //     print("for loop: "+arraynames[j]);
+                            //   }
 
-                              arraynames.add(doc["name"]);
-                              print("arrayname: "+arraynames[i]);
-                              i=i+1;
-                              print(i);
-                            });
-                          });
+                             //var query = firestore.collection("firstcollection").get();
 
-                          for(int j=0; j<arraynames.length; j++)
-                          {
-                            print("for loop: "+arraynames[j]);
-                          }
-
-                          //var query = firestore.collection("firstcollection").get();
-
-                          //
-                          // const snapshot = await query.get();
-                          // const count = snapshot.size;
-                        },
-                        child: Text('Refresh',
-                            style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height:10),
-
-                  Center(
-                    child: Container(
-                      height: size.height * 0.08,
-                      width: size.width * 0.8,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2),
-                        color: Colors.lightBlueAccent,
-                      ),
-                      child: TextButton(
-                        onPressed: () async {
-                          await FirebaseAuth.instance.signOut();
-                          Navigator.pushNamed(context, '/');
-                        },
-                        child: Text('Sign Out',
-                            style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                  ),
-
-
-
-                   Expanded(
-                     child: Container(
-                        child: ListView.builder(
-                          itemCount:arraynames.length,
-                            itemBuilder: (context, index)
-                        {
-                          return Container(
-                            child: ListTile(
-                              contentPadding: EdgeInsets.only(left:32, right:32, top:38,bottom: 38),
-                              tileColor: Colors.teal,
-                              title: Text(arraynames[index], style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),),
-                              subtitle: Text("Is there is subtext", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),),
-                            ),
-                            margin: EdgeInsets.only(bottom: 8, left: 38, right: 38, top:8),
-                          );
-                        }
+                            //
+                            // const snapshot = await query.get();
+                            // const count = snapshot.size;
+                          },
+                          child: Text('Submit',
+                              style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
                         ),
                       ),
-                   ),
-                  
-                ],
-              ),
-            
+                    ),
+
+                    SizedBox(height:10),
+
+                    Center(
+                      child: Container(
+                        height: size.height * 0.08,
+                        width: size.width * 0.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          color: Colors.lightBlueAccent,
+                        ),
+                        child: TextButton(
+                          onPressed: () async {
+                            // print(cardname);
+                            // var newmap = {'name': cardname};
+                            // firestore.collection('firstcollection').add(newmap);
+                            // print(cardname);
+
+                            // db.collection('collectionName').get()
+                            //     .then(snapshot => console.log(snapshot.size));
 
 
+
+                            QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
+                            await FirebaseFirestore.instance
+                                .collection('firstcollection')
+                                .get()
+                                .then((QuerySnapshot querySnapshot) {
+                              querySnapshot.docs.forEach((doc) {
+                                print(doc["name"]);
+
+                                setState(() {
+                                  arraynames.add(doc["name"]);
+                                  print("arrayname: "+arraynames[i]);
+                                  i=i+1;
+                                  print(i);
+                                });
+
+                              });
+                            });
+
+                            for(int j=0; j<arraynames.length; j++)
+                            {
+                              print("for loop: "+arraynames[j]);
+                            }
+
+                            //var query = firestore.collection("firstcollection").get();
+
+                            //
+                            // const snapshot = await query.get();
+                            // const count = snapshot.size;
+                          },
+                          child: Text('Refresh',
+                              style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height:10),
+
+                    Center(
+                      child: Container(
+                        height: size.height * 0.08,
+                        width: size.width * 0.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          color: Colors.lightBlueAccent,
+                        ),
+                        child: TextButton(
+                          onPressed: () async {
+                            await FirebaseAuth.instance.signOut();
+                            Navigator.pushNamed(context, '/');
+                          },
+                          child: Text('Sign Out',
+                              style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ),
+
+
+
+                      Expanded(
+                        child: Container(
+                            child: ListView.builder(
+                              itemCount:arraynames.length,
+                                itemBuilder: (context, index)
+                            {
+                              return Container(
+                                child: ListTile(
+                                  contentPadding: EdgeInsets.only(left:32, right:32, top:38,bottom: 38),
+                                  tileColor: Colors.teal,
+                                  title: Text(arraynames[index], style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),),
+                                  subtitle: Text("Is there is subtext", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),),
+                                ),
+                                margin: EdgeInsets.only(bottom: 8, left: 38, right: 38, top:8),
+                              );
+                            }
+                            ),
+                          ),
+                      ),
+
+
+                  ],
+                ),
 
 
 
