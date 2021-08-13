@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:trello/screens/create_new_account.dart';
 import 'package:trello/screens/login_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -62,7 +63,142 @@ class _CardPageState extends State<CardPage> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Welcome '+LoginPageUserName.loginPageUserName+'!'),
+          title: Text('Hey '+LoginPageUserName.loginPageUserName+'!'),
+          actions: [
+            TextButton(onPressed: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Add New Card',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),),
+                  content: TextField(
+                    onChanged: (value)
+                    {
+                      setState(() {
+                        cardname=value;
+                      });
+                      print(cardname);
+                    },
+                    //style: kBodyText,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                  ),
+                  actions: [
+                    TextButton(onPressed: () async {
+                      var newmap = {'name': cardname};
+                        firestore.collection('firstcollection').add(newmap);
+
+                        QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
+                        await FirebaseFirestore.instance
+                            .collection('firstcollection')
+                            .get()
+                            .then((QuerySnapshot querySnapshot) {
+                          querySnapshot.docs.forEach((doc) {
+                            print(doc["name"]);
+
+                            setState(() {
+                              arraynames.add(doc["name"]);
+                              print("arrayname: "+arraynames[i]);
+                              i=i+1;
+                              print(i);
+                            });
+
+                          });
+                        });
+
+                        for(int j=0; j<arraynames.length; j++)
+                        {
+                          print("for loop: "+arraynames[j]);
+                        }
+
+                        Navigator.pop(context);
+                    }, child: const Text('Submit',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                    ),),),
+                  ],
+                ),
+            ),
+              child: Text('Add Card',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 17,
+            ),
+            ),
+            ),
+            // IconButton(onPressed: () async {
+            //
+            //
+            //   // var newmap = {'name': cardname};
+            //   // firestore.collection('firstcollection').add(newmap);
+            //
+            //   // QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
+            //   // await FirebaseFirestore.instance
+            //   //     .collection('firstcollection')
+            //   //     .get()
+            //   //     .then((QuerySnapshot querySnapshot) {
+            //   //   querySnapshot.docs.forEach((doc) {
+            //   //     print(doc["name"]);
+            //   //
+            //   //     setState(() {
+            //   //       arraynames.add(doc["name"]);
+            //   //       print("arrayname: "+arraynames[i]);
+            //   //       i=i+1;
+            //   //       print(i);
+            //   //     });
+            //   //
+            //   //   });
+            //   // });
+            //   //
+            //   // for(int j=0; j<arraynames.length; j++)
+            //   // {
+            //   //   print("for loop: "+arraynames[j]);
+            //   // }
+            //
+            // }, icon: Icon(Icons.add_circle, color: Colors.white, ),
+            //   tooltip: "Add Card",
+            // ),
+
+            // IconButton(onPressed: ()async {
+            //   QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
+            //   await FirebaseFirestore.instance
+            //       .collection('firstcollection')
+            //       .get()
+            //       .then((QuerySnapshot querySnapshot) {
+            //     querySnapshot.docs.forEach((doc) {
+            //       print(doc["name"]);
+            //
+            //       setState(() {
+            //         arraynames.add(doc["name"]);
+            //         print("arrayname: "+arraynames[i]);
+            //         i=i+1;
+            //         print(i);
+            //       });
+            //
+            //     });
+            //   });
+            //
+            //   for(int j=0; j<arraynames.length; j++)
+            //   {
+            //     print("for loop: "+arraynames[j]);
+            //   }
+            //
+            // }, icon: Icon(Icons.replay_circle_filled, color: Colors.white,),
+            //     tooltip: "Refresh"
+            // ),
+
+            IconButton(onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushNamed(context, '/');
+            }, icon: Icon(Icons.logout, color: Colors.white,),
+                tooltip: "Logout"
+            ),
+          ],
           backgroundColor: Colors.lightBlueAccent,
           elevation: 0,
 
@@ -86,173 +222,179 @@ class _CardPageState extends State<CardPage> {
 
                  Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Center(
-                        child: Container(
-                          height:size.height * 0.08,
-                          width: size.width * 0.8,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[500]!.withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(2)
-                          ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(vertical: 10),
+                    //   child: Center(
+                    //     child: Container(
+                    //       height:size.height * 0.08,
+                    //       width: size.width * 0.8,
+                    //       decoration: BoxDecoration(
+                    //           color: Colors.grey[500]!.withOpacity(0.5),
+                    //           borderRadius: BorderRadius.circular(2)
+                    //       ),
+                    //
+                    //       child: Center(
+                    //         child: TextField(
+                    //           onChanged: (value)
+                    //           {
+                    //             setState(() {
+                    //              cardname=value;
+                    //             });
+                    //             print(cardname);
+                    //           },
+                    //
+                    //           decoration: InputDecoration(
+                    //             border: InputBorder.none,
+                    //             prefixIcon: Padding(
+                    //               padding: const EdgeInsets.symmetric(horizontal: 20),
+                    //               child: Icon(Icons.email, size: 28, color: kWhite,),
+                    //             ),
+                    //             hintText: 'Card name',
+                    //             hintStyle: kBodyText,
+                    //           ),
+                    //           style: kBodyText,
+                    //           keyboardType: TextInputType.emailAddress,
+                    //           textInputAction: TextInputAction.next,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    //
+                    // Center(
+                    //   child: Container(
+                    //     height: size.height * 0.08,
+                    //     width: size.width * 0.8,
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(2),
+                    //       color: Colors.lightBlueAccent,
+                    //     ),
+                    //     child: TextButton(
+                    //       onPressed: () async {
+                    //
+                    //
+                    //         // for(int i=0; i<arraynames.length; i++) {
+                    //         //   arraynames.removeAt(i);
+                    //         // }
+                    //
+                    //         //print(cardname);
+                    //           var newmap = {'name': cardname};
+                    //           firestore.collection('firstcollection').add(newmap);
+                    //           //print(cardname);
+                    //
+                    //         // db.collection('collectionName').get()
+                    //         //     .then(snapshot => console.log(snapshot.size));
+                    //
+                    //
+                    //         // QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
+                    //         // await FirebaseFirestore.instance
+                    //         //     .collection('firstcollection')
+                    //         //     .get()
+                    //         //     .then((QuerySnapshot querySnapshot) {
+                    //         //   querySnapshot.docs.forEach((doc) {
+                    //         //     print(doc["name"]);
+                    //         //
+                    //         //     arraynames.add(doc["name"]);
+                    //         //     print("arrayname: "+arraynames[i]);
+                    //         //     i=i+1;
+                    //         //     print(i);
+                    //         //   });
+                    //         // });
+                    //         //
+                    //         // for(int j=0; j<arraynames.length; j++)
+                    //         //   {
+                    //         //     print("for loop: "+arraynames[j]);
+                    //         //   }
+                    //
+                    //          //var query = firestore.collection("firstcollection").get();
+                    //
+                    //         //
+                    //         // const snapshot = await query.get();
+                    //         // const count = snapshot.size;
+                    //       },
+                    //       child: Text('Submit',
+                    //           style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
+                    //     ),
+                    //   ),
+                    // ),
 
-                          child: Center(
-                            child: TextField(
-                              onChanged: (value)
-                              {
-                                setState(() {
-                                 cardname=value;
-                                });
-                                print(cardname);
-                              },
+                    // SizedBox(height:10),
+                    //
+                    // Center(
+                    //   child: Container(
+                    //     height: size.height * 0.08,
+                    //     width: size.width * 0.8,
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(2),
+                    //       color: Colors.lightBlueAccent,
+                    //     ),
+                    //     child: TextButton(
+                    //       onPressed: () async {
+                    //         // print(cardname);
+                    //         // var newmap = {'name': cardname};
+                    //         // firestore.collection('firstcollection').add(newmap);
+                    //         // print(cardname);
+                    //
+                    //         // db.collection('collectionName').get()
+                    //         //     .then(snapshot => console.log(snapshot.size));
+                    //
+                    //
+                    //
+                    //         // QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
+                    //         // await FirebaseFirestore.instance
+                    //         //     .collection('firstcollection')
+                    //         //     .get()
+                    //         //     .then((QuerySnapshot querySnapshot) {
+                    //         //   querySnapshot.docs.forEach((doc) {
+                    //         //     print(doc["name"]);
+                    //         //
+                    //         //     setState(() {
+                    //         //       arraynames.add(doc["name"]);
+                    //         //       print("arrayname: "+arraynames[i]);
+                    //         //       i=i+1;
+                    //         //       print(i);
+                    //         //     });
+                    //         //
+                    //         //   });
+                    //         // });
+                    //         //
+                    //         // for(int j=0; j<arraynames.length; j++)
+                    //         // {
+                    //         //   print("for loop: "+arraynames[j]);
+                    //         // }
+                    //
+                    //         //var query = firestore.collection("firstcollection").get();
+                    //
+                    //         //
+                    //         // const snapshot = await query.get();
+                    //         // const count = snapshot.size;
+                    //       },
+                    //       child: Text('Refresh',
+                    //           style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
+                    //     ),
+                    //   ),
+                    // ),
 
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                prefixIcon: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                                  child: Icon(Icons.email, size: 28, color: kWhite,),
-                                ),
-                                hintText: 'Card name',
-                                hintStyle: kBodyText,
-                              ),
-                              style: kBodyText,
-                              keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.next,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    Center(
-                      child: Container(
-                        height: size.height * 0.08,
-                        width: size.width * 0.8,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                          color: Colors.lightBlueAccent,
-                        ),
-                        child: TextButton(
-                          onPressed: () async {
-                            //print(cardname);
-                              var newmap = {'name': cardname};
-                              firestore.collection('firstcollection').add(newmap);
-                              //print(cardname);
-
-                            // db.collection('collectionName').get()
-                            //     .then(snapshot => console.log(snapshot.size));
-
-
-                            // QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
-                            // await FirebaseFirestore.instance
-                            //     .collection('firstcollection')
-                            //     .get()
-                            //     .then((QuerySnapshot querySnapshot) {
-                            //   querySnapshot.docs.forEach((doc) {
-                            //     print(doc["name"]);
-                            //
-                            //     arraynames.add(doc["name"]);
-                            //     print("arrayname: "+arraynames[i]);
-                            //     i=i+1;
-                            //     print(i);
-                            //   });
-                            // });
-                            //
-                            // for(int j=0; j<arraynames.length; j++)
-                            //   {
-                            //     print("for loop: "+arraynames[j]);
-                            //   }
-
-                             //var query = firestore.collection("firstcollection").get();
-
-                            //
-                            // const snapshot = await query.get();
-                            // const count = snapshot.size;
-                          },
-                          child: Text('Submit',
-                              style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height:10),
-
-                    Center(
-                      child: Container(
-                        height: size.height * 0.08,
-                        width: size.width * 0.8,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                          color: Colors.lightBlueAccent,
-                        ),
-                        child: TextButton(
-                          onPressed: () async {
-                            // print(cardname);
-                            // var newmap = {'name': cardname};
-                            // firestore.collection('firstcollection').add(newmap);
-                            // print(cardname);
-
-                            // db.collection('collectionName').get()
-                            //     .then(snapshot => console.log(snapshot.size));
-
-
-
-                            QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
-                            await FirebaseFirestore.instance
-                                .collection('firstcollection')
-                                .get()
-                                .then((QuerySnapshot querySnapshot) {
-                              querySnapshot.docs.forEach((doc) {
-                                print(doc["name"]);
-
-                                setState(() {
-                                  arraynames.add(doc["name"]);
-                                  print("arrayname: "+arraynames[i]);
-                                  i=i+1;
-                                  print(i);
-                                });
-
-                              });
-                            });
-
-                            for(int j=0; j<arraynames.length; j++)
-                            {
-                              print("for loop: "+arraynames[j]);
-                            }
-
-                            //var query = firestore.collection("firstcollection").get();
-
-                            //
-                            // const snapshot = await query.get();
-                            // const count = snapshot.size;
-                          },
-                          child: Text('Refresh',
-                              style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height:10),
-
-                    Center(
-                      child: Container(
-                        height: size.height * 0.08,
-                        width: size.width * 0.8,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                          color: Colors.lightBlueAccent,
-                        ),
-                        child: TextButton(
-                          onPressed: () async {
-                            await FirebaseAuth.instance.signOut();
-                            Navigator.pushNamed(context, '/');
-                          },
-                          child: Text('Sign Out',
-                              style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                    ),
+                    // SizedBox(height:10),
+                    //
+                    // Center(
+                    //   child: Container(
+                    //     height: size.height * 0.08,
+                    //     width: size.width * 0.8,
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(2),
+                    //       color: Colors.lightBlueAccent,
+                    //     ),
+                    //     child: TextButton(
+                    //       onPressed: () async {
+                    //         // await FirebaseAuth.instance.signOut();
+                    //         // Navigator.pushNamed(context, '/');
+                    //       },
+                    //       child: Text('Sign Out',
+                    //           style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
+                    //     ),
+                    //   ),
+                    // ),
 
 
 
@@ -265,7 +407,7 @@ class _CardPageState extends State<CardPage> {
                               return Container(
                                 child: ListTile(
                                   contentPadding: EdgeInsets.only(left:32, right:32, top:38,bottom: 38),
-                                  tileColor: Colors.teal,
+                                  tileColor: Colors.lightBlueAccent,
                                   title: Text(arraynames[index], style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),),
                                   subtitle: Text("Is there is subtext", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),),
                                 ),
