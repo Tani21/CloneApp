@@ -87,6 +87,9 @@ class _CardPageState extends State<CardPage> {
                   ),
                   actions: [
                     TextButton(onPressed: () async {
+
+                      //arraynames.removeRange(0, arraynames.length-1);
+
                       var newmap = {'name': cardname};
                         firestore.collection('firstcollection').add(newmap);
 
@@ -113,7 +116,7 @@ class _CardPageState extends State<CardPage> {
                           print("for loop: "+arraynames[j]);
                         }
 
-                        Navigator.pop(context);
+                        Navigator.pushNamed(context, 'CardPages');
                     }, child: const Text('Submit',
                     style: TextStyle(
                       color: Colors.blue,
