@@ -8,11 +8,20 @@ import 'package:trello/screens/login_screen.dart';
 // import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
+import '../pallete.dart';
+
 //import '../pallete.dart';
 
 var arraynames = [];
+var functionality = [];
+var yourname= [];
+
 var cardname="";
+var todofunction="";
+var myname="";
+
 int i=0;
+
 var firestore = FirebaseFirestore.instance;
 
 class CardClassWithProvider extends StatefulWidget with ChangeNotifier {
@@ -35,20 +44,20 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
         setState(() {
           if(!arraynames.contains(doc["name"])) {
             arraynames.add(doc["name"]);
+            functionality.add(doc["function"]);
+            yourname.add(doc["displayname"]);
             print("arrayname: " + arraynames[i]);
+            print("functionality: " + functionality[i]);
+            print("yourname: " + yourname[i]);
             i = i + 1;
             print(i);
           }
         });
-
-
       });
-
     });
   }
 
   @override
-
   void initState() {
     initApp();
     // TODO: implement initState
@@ -57,13 +66,10 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
 
   @override
   Widget build(BuildContext context) {
-
-
     Size size  = MediaQuery.of(context).size;
 
     void cardFunctionUsingProvider ()
     {
-
       showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -72,22 +78,131 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),),
-          content: TextField(
-            onChanged: (value)
-            {
-              setState(() {
-                cardname=value;
-              });
-              print(cardname);
-            },
-            //style: kBodyText,
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
+
+          content: Column(
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              // TextField(
+              //   decoration: InputDecoration(
+              //     hintText: "Card Name",
+              //     hintStyle: TextStyle(
+              //       fontSize: 18,
+              //     ),
+              //     border: OutlineInputBorder(),
+              //     ),
+              //
+              //   maxLines: 2,
+              // ),
+              // content: TextField(
+              //   onChanged:
+
+              //     (value)
+              // {
+              //   setState(() {
+              //     cardname=value;
+              //   });
+              //   print(cardname);
+              // },
+              //style: kBodyText,
+              // keyboardType: TextInputType.emailAddress,
+
+              // textInputAction: TextInputAction.next,
+              TextField(
+
+                decoration: InputDecoration(
+                  hintText: "Card Name",
+                  hintStyle: TextStyle(
+                    fontSize: 18,
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 2,
+
+                  onChanged:
+                    (value)
+                {
+                  setState(()
+                  {
+                    cardname=value;
+                  });
+                  print(cardname);
+                },
+
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                ),
+                //
+                 textCapitalization: TextCapitalization.sentences,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+              ),
+
+              SizedBox(height:20),
+
+              TextField(
+                decoration: InputDecoration(
+                  hintText: "Task Description",
+                  hintStyle: TextStyle(
+                    fontSize: 18,
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 3,
+
+                onChanged:
+                    (value)
+                {
+                  setState(() {
+                    todofunction=value;
+                  });
+                  print(todofunction);
+                },
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                ),
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+              ),
+
+              SizedBox(height:20),
+
+              TextField(
+
+                  decoration: InputDecoration(
+                    hintText: "Your name",
+                    hintStyle: TextStyle(
+                      fontSize: 18,
+                    ),
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 3,
+
+                onChanged:
+                    (value)
+                {
+                  setState(() {
+                    myname=value;
+                  });
+                  print(myname);
+                },
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                ),
+
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+              ),
+            ],
           ),
+
           actions: [
             TextButton(onPressed: () async {
 
-              var newmap = {'name': cardname};
+              var newmap = {'name': cardname, 'function':todofunction, 'displayname': myname};
               await firestore.collection('firstcollection').add(newmap);
               await initApp();
 
@@ -131,7 +246,7 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
             ),
             ),
           ],
-        ),
+      ),
       );
     }
 
@@ -202,7 +317,7 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
                                       ),
 
                                       SizedBox(height: 30,),
-                                      Text("Create a uml diagram to represent the alarm clock along with all the features that the user can interact with to make life simple.",
+                                      Text(functionality[index],
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         color: Colors.grey[400],
@@ -210,7 +325,7 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
                                         ),
                                       ),
                                       SizedBox(height: 20,),
-                                      Text('By: Tanishka',
+                                      Text('By: ${yourname[index]}',
                                       textAlign: TextAlign.end,
                                       style: TextStyle(
                                         fontSize: 19,
