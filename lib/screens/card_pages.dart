@@ -136,7 +136,9 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.black12,
         appBar: AppBar(
+
            title: Text('Hey '+LoginPageUserName.loginPageUserName+'!'),
 
           actions: [
@@ -144,39 +146,91 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
               context.read<CardClassWithProvider>().notifyListeners();
               cardFunctionUsingProvider();
             },
-            icon: Icon(Icons.add_circle),
+            icon: Icon(Icons.add_circle,
+            color: Colors.grey[300],),
               tooltip:"Add Card",
             ),
 
             IconButton(onPressed: () async {
               await FirebaseAuth.instance.signOut();
               Navigator.pushNamed(context, '/');
-            }, icon: Icon(Icons.logout, color: Colors.white,),
+            }, icon: Icon(Icons.logout, color: Colors.grey[300],),
                 tooltip: "Logout"
             ),
           ],
-          backgroundColor: Colors.lightBlueAccent,
+          backgroundColor: Colors.yellow[900],
           elevation: 0,
         ),
 
         body:
                  Column(
+
                   children: [
+
                       Expanded(
                         child: Container(
                             child: ListView.builder(
                               itemCount:arraynames.length,
                                 itemBuilder: (context, index)
                             {
-                              return Container(
-                                child: ListTile(
-                                  contentPadding: EdgeInsets.only(left:32, right:32, top:38,bottom: 38),
-                                  tileColor: Colors.lightBlueAccent,
-                                  title: Text(arraynames[index], style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),),
-                                  subtitle: Text("This is the subtext", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),),
+
+                              return Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24),
                                 ),
-                                margin: EdgeInsets.only(bottom: 8, left: 38, right: 38, top:8),
+                                elevation: 10,
+                                clipBehavior: Clip.antiAlias,
+                                shadowColor: Colors.brown,
+                                color: Colors.brown[900],
+                                margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
+                                child: Padding(
+
+                                  padding: const EdgeInsets.fromLTRB(25,10,25,10),
+                                  child: Column(
+
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 15,),
+                                      Text(arraynames[index],
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            color: Colors.yellow[900],
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+
+                                          ),
+                                      ),
+
+                                      SizedBox(height: 30,),
+                                      Text("Create a uml diagram to represent the alarm clock along with all the features that the user can interact with to make life simple.",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color: Colors.grey[400],
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      SizedBox(height: 20,),
+                                      Text('By: Tanishka',
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                        fontSize: 19,
+                                        color: Colors.grey[400]
+                                      ),)
+
+                                    ],
+                                  ),
+                                ),
                               );
+
+                              // return Container(
+                              //   child: ListTile(
+                              //     contentPadding: EdgeInsets.only(left:32, right:32, top:38,bottom: 38),
+                              //     tileColor: Colors.lightBlueAccent,
+                              //     title: Text(arraynames[index], style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),),
+                              //     subtitle: Text("This is the subtext", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),),
+                              //   ),
+                              //   margin: EdgeInsets.only(bottom: 8, left: 38, right: 38, top:8),
+                              // );
                             }
                             ),
                           ),
