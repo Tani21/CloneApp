@@ -7,11 +7,28 @@ import 'package:trello/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:trello/widgets/widgets.dart';
 
 Future<void> main() async {
-  runApp(MyApp());
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  runApp(
+  MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          create: (_) => new CardClassWithProvider()
+
+
+      ),
+    ],
+child: MyApp(),
+  ),
+
+
+  );
+
+
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +48,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginScreen(),
         'ForgotPassword': (context) => ForgotPassword(),
         'CreateNewAccount': (context) => CreateNewAccount(),
-        'CardPages': (context) => CardPage(),
+        'CardPages': (context) => CardClassWithProvider(),
       },
       // home: LoginScreen(),
     );

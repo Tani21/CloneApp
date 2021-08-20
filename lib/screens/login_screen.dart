@@ -45,23 +45,12 @@ class _LoginScreenState extends State<LoginScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  // TextInputField(
-                  //   icon: Icons.email,
-                  //   hint: 'Email',
-                  //   inputType: TextInputType.emailAddress,
-                  //   inputAction: TextInputAction.next,
-                  // ),
 
                   LoginPageUserName(),
                   TextInputFieldEmail(),
 
               LoginPagePassword(),
-              //     PasswordInput(
-              //   icon: Icons.lock,
-              //   hint: 'Password',
-              //   inputType: TextInputType.name,
-              //   inputAction: TextInputAction.done,
-              // ),
+
               GestureDetector
               (
                 onTap: () => Navigator.pushNamed(context, 'ForgotPassword'),
@@ -75,7 +64,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 25,
               ),
 
-              // RoundedButton(buttonName: 'Login',)
                   NewRoundedButton(),
 
               SizedBox(height: 25),
@@ -112,49 +100,6 @@ class NewRoundedButton extends StatefulWidget {
   _NewRoundedButtonState createState() => _NewRoundedButtonState();
 
 }
-
-//
-// class RoundedButton extends StatefulWidget {
-//   const RoundedButton({
-//     Key? key,
-//     required this.buttonName,
-//   }) : super(key: key);
-//
-//   final String buttonName;
-//
-//
-//
-//   @override
-//   _RoundedButtonState createState() => _RoundedButtonState();
-// }
-//
-// class _RoundedButtonState extends State<RoundedButton> {
-//
-//   FirebaseAuth auth = FirebaseAuth.instance;
-//   var firestore = FirebaseFirestore.instance;
-//   @override
-//   Widget build(BuildContext context) {
-//     Size size = MediaQuery.of(context).size;
-//     return Container(
-//       height: size.height * 0.08,
-//       width: size.width * 0.8,
-//       decoration: BoxDecoration(
-//         borderRadius: BorderRadius.circular(16),
-//         color: kBlue,
-//       ),
-//       child: TextButton(
-//         onPressed: () async {
-//           main();
-//           UserCredential userCredential = await auth.signInAnonymously();
-//           print(userCredential);
-//         },
-//         child: Text(widget.buttonName,
-//             style: kBodyText.copyWith(fontWeight: FontWeight.bold)),
-//       ),
-//     );
-//   }
-// }
-
 
 class TextInputFieldEmail extends StatefulWidget {
    static String email="";
