@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 //import 'package:trello/screens/create_new_account.dart';
 import 'package:trello/screens/login_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_database/firebase_database.dart';
 // import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ var myname="";
 int i=0;
 
 var firestore = FirebaseFirestore.instance;
+Stream<QuerySnapshot> collectionStream = FirebaseFirestore.instance.collection('firstcollection').snapshots();
 
 class CardClassWithProvider extends StatefulWidget with ChangeNotifier {
 
@@ -32,8 +34,9 @@ class CardClassWithProvider extends StatefulWidget with ChangeNotifier {
 
 class _CardClassWithProviderState extends State<CardClassWithProvider> {
 
-  Future <void> initApp() async{
-    QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
+  Future <void> initApp() async {
+    QuerySnapshot retrievedmap = await firestore.collection('firstcolection')
+        .get();
     await FirebaseFirestore.instance
         .collection('firstcollection')
         .get()
@@ -42,7 +45,7 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
         print(doc["name"]);
 
         setState(() {
-          if(!arraynames.contains(doc["name"])) {
+          if (!arraynames.contains(doc["name"])) {
             arraynames.add(doc["name"]);
             functionality.add(doc["function"]);
             yourname.add(doc["displayname"]);
@@ -66,230 +69,234 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
 
   @override
   Widget build(BuildContext context) {
-    Size size  = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
 
-    void cardFunctionUsingProvider ()
-    {
+    void cardFunctionUsingProvider() {
       showDialog(
         context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('Add New Card',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),),
-
-          content: Column(
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            // mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              // TextField(
-              //   decoration: InputDecoration(
-              //     hintText: "Card Name",
-              //     hintStyle: TextStyle(
-              //       fontSize: 18,
-              //     ),
-              //     border: OutlineInputBorder(),
-              //     ),
-              //
-              //   maxLines: 2,
-              // ),
-              // content: TextField(
-              //   onChanged:
-
-              //     (value)
-              // {
-              //   setState(() {
-              //     cardname=value;
-              //   });
-              //   print(cardname);
-              // },
-              //style: kBodyText,
-              // keyboardType: TextInputType.emailAddress,
-
-              // textInputAction: TextInputAction.next,
-              TextField(
-
-                decoration: InputDecoration(
-                  hintText: "Card Name",
-                  hintStyle: TextStyle(
-                    fontSize: 18,
-                  ),
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 2,
-
-                  onChanged:
-                    (value)
-                {
-                  setState(()
-                  {
-                    cardname=value;
-                  });
-                  print(cardname);
-                },
-
+        builder: (BuildContext context) =>
+            AlertDialog(
+              title: const Text('Add New Card',
                 style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                ),
-                //
-                 textCapitalization: TextCapitalization.sentences,
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-              ),
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),),
 
-              SizedBox(height:20),
+              content: Column(
+                // crossAxisAlignment: CrossAxisAlignment.start,
+                // mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // TextField(
+                  //   decoration: InputDecoration(
+                  //     hintText: "Card Name",
+                  //     hintStyle: TextStyle(
+                  //       fontSize: 18,
+                  //     ),
+                  //     border: OutlineInputBorder(),
+                  //     ),
+                  //
+                  //   maxLines: 2,
+                  // ),
+                  // content: TextField(
+                  //   onChanged:
 
-              TextField(
-                decoration: InputDecoration(
-                  hintText: "Task Description",
-                  hintStyle: TextStyle(
-                    fontSize: 18,
-                  ),
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 3,
+                  //     (value)
+                  // {
+                  //   setState(() {
+                  //     cardname=value;
+                  //   });
+                  //   print(cardname);
+                  // },
+                  //style: kBodyText,
+                  // keyboardType: TextInputType.emailAddress,
 
-                onChanged:
-                    (value)
-                {
-                  setState(() {
-                    todofunction=value;
-                  });
-                  print(todofunction);
-                },
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                ),
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-              ),
+                  // textInputAction: TextInputAction.next,
+                  TextField(
 
-              SizedBox(height:20),
-
-              TextField(
-
-                  decoration: InputDecoration(
-                    hintText: "Your name",
-                    hintStyle: TextStyle(
-                      fontSize: 18,
+                    decoration: InputDecoration(
+                      hintText: "Card Name",
+                      hintStyle: TextStyle(
+                        fontSize: 18,
+                      ),
+                      border: OutlineInputBorder(),
                     ),
-                    border: OutlineInputBorder(),
+                    maxLines: 2,
+
+                    onChanged:
+                        (value) {
+                      setState(() {
+                        cardname = value;
+                      });
+                      print(cardname);
+                    },
+
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                    ),
+                    //
+                    textCapitalization: TextCapitalization.sentences,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
                   ),
-                  maxLines: 3,
 
-                onChanged:
-                    (value)
-                {
-                  setState(() {
-                    myname=value;
-                  });
-                  print(myname);
-                },
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
+                  SizedBox(height: 20),
+
+                  TextField(
+                    decoration: InputDecoration(
+                      hintText: "Task Description",
+                      hintStyle: TextStyle(
+                        fontSize: 18,
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    maxLines: 3,
+
+                    onChanged:
+                        (value) {
+                      setState(() {
+                        todofunction = value;
+                      });
+                      print(todofunction);
+                    },
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                  ),
+
+                  SizedBox(height: 20),
+
+                  TextField(
+
+                    decoration: InputDecoration(
+                      hintText: "Your name",
+                      hintStyle: TextStyle(
+                        fontSize: 18,
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    maxLines: 3,
+
+                    onChanged:
+                        (value) {
+                      setState(() {
+                        myname = value;
+                      });
+                      print(myname);
+                    },
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                    ),
+
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                  ),
+                ],
+              ),
+
+              actions: [
+                TextButton(onPressed: () async {
+                  var newmap = {
+                    'name': cardname,
+                    'function': todofunction,
+                    'displayname': myname
+                  };
+                  await firestore.collection('firstcollection').add(newmap);
+                  await initApp();
+
+                  //arraynames.removeRange(0, arraynames.length-1);
+
+
+                  //
+                  // var newmap = {'name': cardname};
+                  // firestore.collection('firstcollection').add(newmap);
+                  //
+                  // QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
+                  // await FirebaseFirestore.instance
+                  //     .collection('firstcollection')
+                  //     .get()
+                  //     .then((QuerySnapshot querySnapshot) {
+                  //   querySnapshot.docs.forEach((doc) {
+                  //     print(doc["name"]);
+                  //
+                  //     setState(() {
+                  //       arraynames.add(doc["name"]);
+                  //       print("arrayname: "+arraynames[i]);
+                  //       i=i+1;
+                  //       print(i);
+                  //     });
+                  //
+                  //   });
+                  // });
+                  //
+                  // for(int j=0; j<arraynames.length; j++)
+                  // {
+                  //   print("for loop: "+arraynames[j]);
+                  // }
+                  Navigator.pop(context);
+                  //Navigator.pushNamed(context, 'CardPages');
+                }, child: const Text('Submit',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
-
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-              ),
-            ],
-          ),
-
-          actions: [
-            TextButton(onPressed: () async {
-
-              var newmap = {'name': cardname, 'function':todofunction, 'displayname': myname};
-              await firestore.collection('firstcollection').add(newmap);
-              await initApp();
-
-              //arraynames.removeRange(0, arraynames.length-1);
-
-
-              //
-              // var newmap = {'name': cardname};
-              // firestore.collection('firstcollection').add(newmap);
-              //
-              // QuerySnapshot retrievedmap = await firestore.collection('firstcolection').get();
-              // await FirebaseFirestore.instance
-              //     .collection('firstcollection')
-              //     .get()
-              //     .then((QuerySnapshot querySnapshot) {
-              //   querySnapshot.docs.forEach((doc) {
-              //     print(doc["name"]);
-              //
-              //     setState(() {
-              //       arraynames.add(doc["name"]);
-              //       print("arrayname: "+arraynames[i]);
-              //       i=i+1;
-              //       print(i);
-              //     });
-              //
-              //   });
-              // });
-              //
-              // for(int j=0; j<arraynames.length; j++)
-              // {
-              //   print("for loop: "+arraynames[j]);
-              // }
-               Navigator.pop(context);
-              //Navigator.pushNamed(context, 'CardPages');
-            }, child: const Text('Submit',
-              style: TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
+                ),
+              ],
             ),
-            ),
-          ],
-      ),
       );
     }
 
     return Scaffold(
       backgroundColor: Colors.black12,
-        appBar: AppBar(
+      appBar: AppBar(
 
-           title: Text('Hey '+LoginPageUserName.loginPageUserName+'!'),
+        title: Text('Hey ' + LoginPageUserName.loginPageUserName + '!'),
 
-          actions: [
-            IconButton(onPressed: () {
-              context.read<CardClassWithProvider>().notifyListeners();
-              cardFunctionUsingProvider();
-            },
+        actions: [
+          IconButton(onPressed: () {
+            context.read<CardClassWithProvider>().notifyListeners();
+            cardFunctionUsingProvider();
+          },
             icon: Icon(Icons.add_circle,
-            color: Colors.grey[300],),
-              tooltip:"Add Card",
-            ),
+              color: Colors.grey[300],),
+            tooltip: "Add Card",
+          ),
 
-            IconButton(onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.pushNamed(context, '/');
-            }, icon: Icon(Icons.logout, color: Colors.grey[300],),
-                tooltip: "Logout"
-            ),
-          ],
-          backgroundColor: Colors.yellow[900],
-          elevation: 0,
-        ),
+          IconButton(onPressed: () async {
+            await FirebaseAuth.instance.signOut();
+            Navigator.pushNamed(context, '/');
+          }, icon: Icon(Icons.logout, color: Colors.grey[300],),
+              tooltip: "Logout"
+          ),
+        ],
+        backgroundColor: Colors.yellow[900],
+        elevation: 0,
+      ),
 
-        body:
-                 Column(
+      body: StreamBuilder(
+      stream: collectionStream,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot)
+        {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
 
-                  children: [
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Text("Loading");
+          }
 
-                      Expanded(
-                        child: Container(
-                            child: ListView.builder(
-                              itemCount:arraynames.length,
-                                itemBuilder: (context, index)
-                            {
-
-                              return Card(
+          return ListView(
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+            Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+            return Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(24),
                                 ),
@@ -306,7 +313,7 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(height: 15,),
-                                      Text(arraynames[index],
+                                      Text(data['name'],
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                             color: Colors.yellow[900],
@@ -317,7 +324,7 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
                                       ),
 
                                       SizedBox(height: 30,),
-                                      Text(functionality[index],
+                                      Text(data['function'],
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         color: Colors.grey[400],
@@ -325,34 +332,102 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
                                         ),
                                       ),
                                       SizedBox(height: 20,),
-                                      Text('By: ${yourname[index]}',
+                                      Text('By: ${data['displayname']}',
                                       textAlign: TextAlign.end,
                                       style: TextStyle(
                                         fontSize: 19,
                                         color: Colors.grey[400]
-                                      ),)
-
-                                    ],
-                                  ),
-                                ),
-                              );
-
-                              // return Container(
-                              //   child: ListTile(
-                              //     contentPadding: EdgeInsets.only(left:32, right:32, top:38,bottom: 38),
-                              //     tileColor: Colors.lightBlueAccent,
-                              //     title: Text(arraynames[index], style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),),
-                              //     subtitle: Text("This is the subtext", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),),
-                              //   ),
-                              //   margin: EdgeInsets.only(bottom: 8, left: 38, right: 38, top:8),
-                              // );
-                            }
-                            ),
-                          ),
-                      ),
-                  ],
+                                      ),
                 ),
-    );
+
+                ],
+            ),
+            ),
+                );
+
+
+          }).toList(),
+          );
+
+        },
+      ),
+
+
+              //  Column(
+              //
+              //   children: [
+              //
+              //       Expanded(
+              //         child: Container(
+              //             child: ListView.builder(
+              //               itemCount:arraynames.length,
+              //                 itemBuilder: (context, index)
+              //             {
+              //
+              //               return Card(
+              //                 shape: RoundedRectangleBorder(
+              //                   borderRadius: BorderRadius.circular(24),
+              //                 ),
+              //                 elevation: 10,
+              //                 clipBehavior: Clip.antiAlias,
+              //                 shadowColor: Colors.brown,
+              //                 color: Colors.brown[900],
+              //                 margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
+              //                 child: Padding(
+              //
+              //                   padding: const EdgeInsets.fromLTRB(25,10,25,10),
+              //                   child: Column(
+              //
+              //                     crossAxisAlignment: CrossAxisAlignment.start,
+              //                     children: [
+              //                       SizedBox(height: 15,),
+              //                       Text(arraynames[index],
+              //                           textAlign: TextAlign.start,
+              //                           style: TextStyle(
+              //                             color: Colors.yellow[900],
+              //                             fontSize: 25,
+              //                             fontWeight: FontWeight.bold,
+              //
+              //                           ),
+              //                       ),
+              //
+              //                       SizedBox(height: 30,),
+              //                       Text(functionality[index],
+              //                       textAlign: TextAlign.left,
+              //                       style: TextStyle(
+              //                         color: Colors.grey[400],
+              //                           fontSize: 18,
+              //                         ),
+              //                       ),
+              //                       SizedBox(height: 20,),
+              //                       Text('By: ${yourname[index]}',
+              //                       textAlign: TextAlign.end,
+              //                       style: TextStyle(
+              //                         fontSize: 19,
+              //                         color: Colors.grey[400]
+              //                       ),)
+              //
+              //                     ],
+              //                   ),
+              //                 ),
+              //               );
+              //
+              //               // return Container(
+              //               //   child: ListTile(
+              //               //     contentPadding: EdgeInsets.only(left:32, right:32, top:38,bottom: 38),
+              //               //     tileColor: Colors.lightBlueAccent,
+              //               //     title: Text(arraynames[index], style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),),
+              //               //     subtitle: Text("This is the subtext", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),),
+              //               //   ),
+              //               //   margin: EdgeInsets.only(bottom: 8, left: 38, right: 38, top:8),
+              //               // );
+              //             }
+              //             ),
+              //           ),
+              //       ),
+              //   ],
+              // ),
+            );
   }
 }
 
