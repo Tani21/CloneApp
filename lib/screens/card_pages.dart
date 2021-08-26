@@ -21,7 +21,17 @@ var cardname="";
 var todofunction="";
 var myname="";
 
-int i=0;
+int i=0, productCount=0;
+
+Future<void> cardsnumber () async
+{
+  QuerySnapshot productCollection = await
+  FirebaseFirestore.instance.collection('firstcollection').get();
+   productCount = productCollection.size;
+   print("product count: $productCount" );
+
+}
+
 
 var firestore = FirebaseFirestore.instance;
 Stream<QuerySnapshot> collectionStream = FirebaseFirestore.instance.collection('firstcollection').snapshots();
@@ -56,6 +66,7 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
             print(i);
           }
         });
+        cardsnumber();
       });
     });
   }
@@ -171,32 +182,32 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
 
                   SizedBox(height: 20),
 
-                  TextField(
-
-                    decoration: InputDecoration(
-                      hintText: "Your name",
-                      hintStyle: TextStyle(
-                        fontSize: 18,
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    maxLines: 3,
-
-                    onChanged:
-                        (value) {
-                      setState(() {
-                        myname = value;
-                      });
-                      print(myname);
-                    },
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                    ),
-
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                  ),
+                  // TextField(
+                  //
+                  //   decoration: InputDecoration(
+                  //     hintText: "Your name",
+                  //     hintStyle: TextStyle(
+                  //       fontSize: 18,
+                  //     ),
+                  //     border: OutlineInputBorder(),
+                  //   ),
+                  //   maxLines: 3,
+                  //
+                  //   onChanged:
+                  //       (value) {
+                  //     setState(() {
+                  //       myname = value;
+                  //     });
+                  //     print(myname);
+                  //   },
+                  //   style: TextStyle(
+                  //     color: Colors.black,
+                  //     fontSize: 15,
+                  //   ),
+                  //
+                  //   keyboardType: TextInputType.emailAddress,
+                  //   textInputAction: TextInputAction.next,
+                  // ),
                 ],
               ),
 
@@ -205,7 +216,7 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
                   var newmap = {
                     'name': cardname,
                     'function': todofunction,
-                    'displayname': myname
+                    'displayname': LoginPageUserName.loginPageUserName,
                   };
                   await firestore.collection('firstcollection').add(newmap);
                   await initApp();
@@ -258,7 +269,7 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
       backgroundColor: Colors.black12,
       appBar: AppBar(
 
-        title: Text('Hey ' + LoginPageUserName.loginPageUserName + '!'),
+        title: Text('Hey ' + LoginPageUserName.loginPageUserName + '!' ),
 
         actions: [
           IconButton(onPressed: () {
@@ -293,14 +304,23 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
             return Text("Loading");
           }
 
+          cardsnumber();
+          
+
           return ListView(
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+
+
+            // getDocuments.then((myDocuments){
+            //   print("${myDocuments.documents.length}");
+            // });
+
             return Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(24),
                                 ),
-                                elevation: 10,
+                                elevation: 5,
                                 clipBehavior: Clip.antiAlias,
                                 shadowColor: Colors.brown,
                                 color: Colors.brown[900],
@@ -313,7 +333,9 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(height: 15,),
-                                      Text(data['name'],
+                                       Text(
+                                  //'${productCount}',
+                                   data['name'],
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                             color: Colors.yellow[900],
@@ -349,10 +371,22 @@ class _CardClassWithProviderState extends State<CardClassWithProvider> {
           }).toList(),
           );
 
+
+
         },
+
+
       ),
 
-
+floatingActionButton: FloatingActionButton.extended(
+  backgroundColor: Colors.yellow[900],
+  onPressed: () {},
+  label: Text('Cards: ${productCount}',
+  style: TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+  ),),
+),
               //  Column(
               //
               //   children: [
